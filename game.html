@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <meta name="viewport" content="width=device-width">
+  </head>
+  <body>
+    <canvas id="game" width="432" height="768" style="background-color:#A0A0FF;position:absolute;top:0;left:0"></canvas>
+    <button onClick="Javascript:window.open(document.getElementById('game').toDataURL())" style="position:absolute;top:10px;left:10px;display:none">Screenshot</button>
+    <div id="log" style="background-color:#BBAAAA;position:absolute;display:inline;text-align:center;font-family:impact;padding:8px">
+        <h2>Sign In</h2>
+        <form>
+            Username: <input type="text" id="lu"><br>
+            Password: <input type="password" id="lp">
+        </form>
+        <a href="https://script.google.com/macros/s/AKfycbxvhXbpKyCOFd3MirgJRemjPmOxylwE71l_KpDvHqikXFay4Abh/exec?mode=recover" target="_blank">Forgot password?</a><button onClick="Javascript:loog()">Log In</button> <button onClick="Javascript:toggle('log')">Cancel</button>
+    </div>
+    <div id="sign" style="background-color:#BBAAAA;position:absolute;display:inline;text-align:center;font-family:impact;padding:8px">
+        <h2>Sign Up</h2>
+        <form>
+            Username: <input type="text" id="su" onblur="g.withSuccessHandler(iuup).UserTest(document.getElementById('su').value)">
+            <p id="uat" style="display:none"><br>Username already in use</p><br>
+            Email: <input type="text" id="se" onblur="g.withSuccessHandler(ieup).EmailTest(document.getElementById('se').value)">
+            <p id="eat" style="display:none"><br>Email already in use</p><br>
+            Password: <input type="password" id="sp" onblur="checkPass()"><br>
+            Confirm Password: <input type="password" id="sc" onblur="checkPass()">
+        </form>
+        <p id="pmm" style="display:none">Passwords must match<br></p>
+        <button onClick="Javascript:signg()">Sign Up</button> <button onClick="Javascript:toggle('sign')">Cancel</button>
+    </div>
+    <script>
+        var logging = true
+        var signing = true
+        document.getElementById("log").style.left = (216-((document.getElementById("log").offsetWidth)/2))+"px"
+        document.getElementById("log").style.top = (384-((document.getElementById("log").offsetHeight)/2))+"px"
+        document.getElementById("sign").style.left = (216-((document.getElementById("sign").offsetWidth)/2))+"px"
+        document.getElementById("sign").style.top = (384-((document.getElementById("sign").offsetHeight)/2))+"px"
+        toggle("log")
+        toggle("sign")
+        var g = google.script.run;
+        var user = ""
+        var logged = false
+        var uun = false
+        var uea = false
+        var pwm = false
+        var c=document.getElementById('game');
+        var ctx = c.getContext('2d');
+            var ref = "abcdefghijklmnopqrstuvwxyz0123456789.:!";
+                 var font = [
+                 [[0,1,1,1,0],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,1,1,1,1],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1]],
+                 [[1,1,1,1,0],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,1,1,1,0],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,1,1,1,0]],
+                 [[0,1,1,1,0],
+                  [1,0,0,0,1],
+                  [1,0,0,0,0],
+                  [1,0,0,0,0],
+                  [1,0,0,0,0],
+                  [1,0,0,0,1],
+                  [0,1,1,1,0]],
+                 [[1,1,1,1,0],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,1,1,1,0]],
+                 [[1,1,1,1,1],
+                  [1,0,0,0,0],
+                  [1,0,0,0,0],
+                  [1,1,1,1,0],
+                  [1,0,0,0,0],
+                  [1,0,0,0,0],
+                  [1,1,1,1,1]],
+                 [[1,1,1,1,1],
+                  [1,0,0,0,0],
+                  [1,0,0,0,0],
+                  [1,1,1,1,0],
+                  [1,0,0,0,0],
+                  [1,0,0,0,0],
+                  [1,0,0,0,0]],
+                 [[0,1,1,1,0],
+                  [1,0,0,0,1],
+                  [1,0,0,0,0],
+                  [1,0,0,1,1],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [0,1,1,1,0]],
+                 [[1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,1,1,1,1],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1]],
+                 [[0,1,1,1,0],
+                  [0,0,1,0,0],
+                  [0,0,1,0,0],
+                  [0,0,1,0,0],
+                  [0,0,1,0,0],
+                  [0,0,1,0,0],
+                  [0,1,1,1,0]],
+                 [[0,0,1,1,1],
+                  [0,0,0,1,0],
+                  [0,0,0,1,0],
+                  [0,0,0,1,0],
+                  [0,0,0,1,0],
+                  [1,0,0,1,0],
+                  [0,1,1,0,0]],
+                 [[1,0,0,0,1],
+                  [1,0,0,1,0],
+                  [1,0,1,0,0],
+                  [1,1,0,0,0],
+                  [1,0,1,0,0],
+                  [1,0,0,1,0],
+                  [1,0,0,0,1]],
+                 [[1,0,0,0,0],
+                  [1,0,0,0,0],
+                  [1,0,0,0,0],
+                  [1,0,0,0,0],
+                  [1,0,0,0,0],
+                  [1,0,0,0,0],
+                  [1,1,1,1,1]],
+                 [[1,0,0,0,1],
+                  [1,1,0,1,1],
+                  [1,0,1,0,1],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1]],
+                 [[1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,1,0,0,1],
+                  [1,0,1,0,1],
+                  [1,0,0,1,1],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1]],
+                 [[0,1,1,1,0],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [0,1,1,1,0]],
+                 [[1,1,1,1,0],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,1,1,1,0],
+                  [1,0,0,0,0],
+                  [1,0,0,0,0],
+                  [1,0,0,0,0]],
+                 [[0,1,1,1,0],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,0,1,0,1],
+                  [1,0,0,1,0],
+                  [0,1,1,0,1]],
+                 [[1,1,1,1,0],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,1,1,1,0],
+                  [1,0,1,0,0],
+                  [1,0,0,1,0],
+                  [1,0,0,0,1]],
+                 [[0,1,1,1,1],
+                  [1,0,0,0,0],
+                  [1,0,0,0,0],
+                  [0,1,1,1,0],
+                  [0,0,0,0,1],
+                  [0,0,0,0,1],
+                  [1,1,1,1,0]],
+                 [[1,1,1,1,1],
+                  [0,0,1,0,0],
+                  [0,0,1,0,0],
+                  [0,0,1,0,0],
+                  [0,0,1,0,0],
+                  [0,0,1,0,0],
+                  [0,0,1,0,0]],
+                 [[1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [0,1,1,1,0]],
+                 [[1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [0,1,0,1,0],
+                  [0,1,0,1,0],
+                  [0,0,1,0,0]],
+                 [[1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [1,0,1,0,1],
+                  [1,1,0,1,1],
+                  [1,0,0,0,1]],
+                 [[1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [0,1,0,1,0],
+                  [0,0,1,0,0],
+                  [0,1,0,1,0],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1]],
+                 [[1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [0,1,0,1,0],
+                  [0,0,1,0,0],
+                  [0,0,1,0,0],
+                  [0,0,1,0,0],
+                  [0,0,1,0,0]],
+                 [[1,1,1,1,1],
+                  [0,0,0,0,1],
+                  [0,0,0,1,0],
+                  [0,0,1,0,0],
+                  [0,1,0,0,0],
+                  [1,0,0,0,0],
+                  [1,1,1,1,1]],
+                 [[0,1,1,1,0],
+                  [1,0,0,0,1],
+                  [1,0,0,1,1],
+                  [1,0,1,0,1],
+                  [1,1,0,0,1],
+                  [1,0,0,0,1],
+                  [0,1,1,1,0]],
+                 [[0,0,1,0,0],
+                  [0,1,1,0,0],
+                  [0,0,1,0,0],
+                  [0,0,1,0,0],
+                  [0,0,1,0,0],
+                  [0,0,1,0,0],
+                  [0,1,1,1,0]],
+                 [[0,1,1,1,0],
+                  [1,0,0,0,1],
+                  [0,0,0,0,1],
+                  [0,0,0,1,0],
+                  [0,0,1,0,0],
+                  [0,1,0,0,0],
+                  [1,1,1,1,1]],
+                 [[1,1,1,1,1],
+                  [0,0,0,1,0],
+                  [0,0,1,0,0],
+                  [0,0,0,1,0],
+                  [0,0,0,0,1],
+                  [1,0,0,0,1],
+                  [0,1,1,1,0]],
+                 [[0,0,0,1,0],
+                  [0,0,1,1,0],
+                  [0,1,0,1,0],
+                  [1,0,0,1,0],
+                  [1,1,1,1,1],
+                  [0,0,0,1,0],
+                  [0,0,0,1,0]],
+                 [[1,1,1,1,1],
+                  [1,0,0,0,0],
+                  [1,1,1,1,0],
+                  [0,0,0,0,1],
+                  [0,0,0,0,1],
+                  [1,0,0,0,1],
+                  [0,1,1,1,0]],
+                 [[0,0,1,1,0],
+                  [0,1,0,0,0],
+                  [1,0,0,0,0],
+                  [1,1,1,1,0],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [0,1,1,1,0]],
+                 [[1,1,1,1,1],
+                  [0,0,0,0,1],
+                  [0,0,0,1,0],
+                  [0,0,1,0,0],
+                  [0,1,0,0,0],
+                  [0,1,0,0,0],
+                  [0,1,0,0,0]],
+                 [[0,1,1,1,0],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [0,1,1,1,0],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [0,1,1,1,0]],
+                 [[0,1,1,1,0],
+                  [1,0,0,0,1],
+                  [1,0,0,0,1],
+                  [0,1,1,1,1],
+                  [0,0,0,0,1],
+                  [0,0,0,1,0],
+                  [0,1,1,0,0]],
+                 [[0,0,0,0,0],
+                  [0,0,0,0,0],
+                  [0,0,0,0,0],
+                  [0,0,0,0,0],
+                  [0,0,0,0,0],
+                  [0,1,1,0,0],
+                  [0,1,1,0,0]],
+                 [[0,0,0,0,0],
+                  [0,1,1,0,0],
+                  [0,1,1,0,0],
+                  [0,0,0,0,0],
+                  [0,1,1,0,0],
+                  [0,1,1,0,0],
+                  [0,0,0,0,0]],
+                 [[0,0,1,0,0],
+                  [0,0,1,0,0],
+                  [0,0,1,0,0],
+                  [0,0,1,0,0],
+                  [0,0,0,0,0],
+                  [0,0,1,0,0],
+                  [0,0,1,0,0]]];
+        //blank space to separate from important stuff in program
+        
+        
+        
+        
+        
+        title();
+        var end=false
+        //loog();
+        var hs = 0;
+        var supportsTouch = false;
+        var game=false;
+                document.getElementById('game').addEventListener('click',function(event) {
+                    if(!game && !logging && !signing && !end) {
+                        var x = event.pageX - document.getElementById('game').offsetLeft;
+                        var y = event.pageY - document.getElementById('game').offsetTop;
+                        if(x>136 && y>596 && x<136+158 && y<640) {
+                            toggle('log')
+                            logging=!logging
+                        } else if(x>127 && y>644 && x<127+174 && y<688) {
+                            toggle('sign')
+                            signing=!signing
+                        } else {
+                            game=true;
+                            startGame();
+                        }
+                    }
+                    if(end) {
+                        end=false
+                        title()
+                    }
+                });
+        window.addEventListener('keypress', function(e) {
+            var key = e.keyCode ? e.keyCode : e.which;
+            if(!game && !logging && !signing && !end) {
+                if(key==13) {game=true;startGame()}
+            }
+            if(end && key==13) {end=false;title()}
+        })
+        if ('ontouchstart' in window) {
+            //iOS & android
+            supportsTouch = true;
+        } else if(window.navigator.msPointerEnabled) {
+            //Win8
+            supportsTouch = true;
+        }
+        function pxl(x,y,color) {
+            ctx.fillStyle = color;
+            ctx.fillRect(x*4,y*4,4,4);
+        }
+        function process(Logl) {
+            if(Logl[0]==1) {
+                logged = true
+                window.alert("Hello, "+user+", welcome, your High Score is "+Logl[1])
+                hs=Logl[1];
+                toggle('log');
+                title();
+            } else {
+                var eiie = ""
+                if(Logl[0]==-1) {eiie="username"} else {eiie="password"}
+                window.alert("Login failed: Bad "+eiie)
+            }
+        }
+        function toggle(b) {
+            if(document.getElementById(b).style.display == "none") {
+                document.getElementById(b).style.display = "inline"
+            } else {
+                document.getElementById(b).style.display = "none"
+            }
+            logging=false
+            signing=false
+            document.getElementById('lu').value = ""
+            document.getElementById('lp').value = ""
+            document.getElementById('su').value = ""
+            document.getElementById('se').value = ""
+            document.getElementById('sp').value = ""
+            document.getElementById('sc').value = ""
+        }
+        function loog() {
+            title();
+            user=document.getElementById("lu").value
+            var pass=document.getElementById("lp").value
+            if(user.length<0 || pass.length<0){
+                window.alert("Please fill everything out")} else{
+            g.withSuccessHandler(process).signIn(user,pass);}
+        }
+        function iuup(use) {
+            if(use) {
+                document.getElementById("uat").style.display = "inline"
+                uun = true
+            } else {
+                document.getElementById("uat").style.display = "none"
+                uun = false
+            }
+        }
+        function ieup(use) {
+            if(use) {
+                document.getElementById("eat").style.display = "inline"
+                uea = true
+            } else {
+                document.getElementById("eat").style.display = "none"
+                uea = false
+            }
+        }
+        function checkPass() {
+            if(document.getElementById('sc').value!=document.getElementById('sp').value) {
+                pwm=false
+                document.getElementById('pmm').style.display = "inline"
+            } else {
+                pwm=true
+                document.getElementById('pmm').style.display = "none"
+            }
+        }
+        function signg() {
+            if(document.getElementById('su').value != "" && document.getElementById('sp').value != "" && document.getElementById('sc').value != "" && document.getElementById('se').value.indexOf('@') != -1 && document.getElementById('se').value.indexOf('.',document.getElementById('se').value.length-5) == document.getElementById('se').value.length-4 && !uun && !uea && pwm) {
+                g.signUp(document.getElementById('su').value,document.getElementById('sp').value,document.getElementById('se').value)
+                window.alert("Success!\n\nIf all the information you gave was correct, an email has been sent to "+document.getElementById('se').value+" with a link to activate your Dodger account!\n\nIt will expire in 24 hours, so don't hesitate, and happy dodging!")
+                toggle('sign')
+            } else {
+                window.alert('Please fill out all fields correctly');
+            }
+        }
+        function text(x,y,color,text) {
+            for(q=0;q<text.length;q++) {
+                var char = text.substring(q,q+1).toLowerCase();
+                if(char != " ") {
+                var fole = font[ref.indexOf(char)];
+                for(h=0;h<7;h++) {
+                    for(w=0;w<5;w++) {
+                        if(fole[h][w]==1) {pxl((x+w+(6*q)),(y+h),color);}
+                    }
+                }
+            }}
+        }
+        function gameOver(s) {/*
+            var i = 0
+            while(i<11) {
+                ctx.fillStyle = "rgba(255,0,0,"+(1-(.1*i))+")";
+                ctx.fillRect(x,500,64,64)
+                ctx.fillStyle="#FFFF00"
+                ctx.fillRect(box.left,box.top,64,64)
+                var fifif = setTimeout(function() {i++})
+            }*/
+            //window.alert('you died ya friggin doofus');
+            game=false;
+            end=true
+            endScreen(s);
+        }
+        function endScreen(s) {
+            ctx.fillStyle = "#A0A0FF";
+            ctx.fillRect(0,0,c.width,c.height);
+            text(20,20,"#000000","YOU DIED!")
+            text(20,40,"#000000","SCORE:"+s)
+            text(20,48,"#000000","HS: "+hs.toString())
+            text(10,70,"#000000","CLICK SCREEN");
+            text(40,78,"#000000","OR");
+            text(13,86,"#000000","PRESS ENTER");
+        }
+        function title() {
+            end=false
+            ctx.fillStyle = "#A0A0FF";
+            ctx.fillRect(0,0,c.width,c.height);
+            ctx.fillStyle="#FF0000";
+            ctx.fillRect(184,500,64,64);
+            text(26,10,"#000000","DODGER");
+            text(8,18,"#000000","CLICK SCREEN");
+            text(38,26,"#000000","OR");
+            text(11,34,"#000000","PRESS ENTER");
+            if(logged) {
+                text(10,150,"#000000","HS:")
+                text(28,150,"#000000",hs.toString())
+            } else {
+                ctx.fillStyle = "#FFC520";
+                ctx.fillRect(136,596,158,44)
+                text(36,151,"#000000","LOG IN")
+                ctx.fillStyle = "#FFC520";
+                ctx.fillRect(127,644,174,44)
+                text(33,163,"#000000","SIGN UP")
+            }
+        }
+        function startGame() {
+            var score = 0;
+            var sped = 0;
+            var cx = 1;
+            var cl = 184;
+            var cr = 184+64;
+            var mov = 0;
+            var buffer = 1;
+            var bar = [];
+            var pause = false;
+            var dead = 0;
+            var kill=-1;
+            var dx = 0;
+            loop();
+            animate();
+            
+            window.requestAnimationFrame = (function(callback) {
+                return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
+                function(callback) {
+                  if(dead===0 && kill<0){window.setTimeout(callback, 1000 / 60);}
+                };
+              })();
+        
+              function animate() {
+                ctx.fillStyle = "#A0A0FF";
+                ctx.fillRect(0,0,c.width,c.height);
+
+                // draw stuff
+                ctx.fillStyle = "rgba(255,0,0,"+(1-(.025*(kill+1)))+")";
+                if(dead===0) {
+                    ctx.fillRect(cl,500,64,64);
+                } else if(kill<41) {
+                    ctx.fillRect(dx,500,64,64);
+                }
+                ctx.fillStyle = "#FFFF00";
+                bar.forEach(function(b) {
+                    ctx.fillRect(88+(96*b.lane),b.top,64,64);
+                })
+                //ctx.fillStyle = "#00FF00";
+                //ctx.fillRect(388,16,32,32);
+                ctx.fillStyle = "#FFA000";
+                ctx.fillRect(0,668,432,100);
+                ctx.fillStyle = "#FFC520";
+                ctx.fillRect(8,676,416,84);
+                text(6,172,"#000000","SCORE:");
+                text(6,180,"#000000",Math.floor(score).toString());
+                if(pause){text(66,172,"#000000","PAUSED");}
+
+                // request new frame
+                if(kill<100){
+                requestAnimationFrame(function() {
+                  animate();
+                });}
+              }
+            function loop() {
+            var gam = setInterval(function(){
+                if(pause) {clearInterval(gam);}
+                if(kill>100) {
+                if(Math.floor(score)>hs && logged==true) {
+                    hs=Math.floor(score);
+                    window.alert("Your new high score is:\n"+hs);
+                }
+                clearInterval(gam);
+                g.updateScore(user,hs);
+                gameOver(Math.floor(score).toString());
+                }
+                
+                
+                //Animate and draw character
+                if(mov!==0){cl = 88+(96*cx)-(((mov/Math.abs(mov)))*Math.round(64*((0.01*Math.pow(mov,2)))))}else if(kill>=0){cl=dx}else{cl=88+96*cx}
+                cr = cl+64
+                if(mov!=0){mov-=(mov/Math.abs(mov))}
+                
+                //Animate and draw barriers
+                buffer-=1;
+                if(buffer==0) {
+                  bar.push({
+                      top: -64,
+                      bot: 0,
+                      left: 0,
+                      right: 0,
+                      lane: Math.floor(Math.random()*3)
+                  })
+                  bar[bar.length-1].left = bar[bar.length-1].lane*96 + 88
+                  bar[bar.length-1].right = bar[bar.length-1].left+64
+                  buffer+=(60-Math.floor(sped/155));
+                }
+                bar.forEach(function(b) {
+                    if(b.top>=768) {bar.splice(bar.indexOf(b),1)}
+                    else {
+                        b.top+=Math.floor(5+(sped/500))
+                        b.bot=b.top+64
+                        if(cl<(b.right-8) && cr>(b.left+8) && b.bot-8>500 && b.top+8<564 && dead===0) {
+                            kill = 0;
+                            dx=cl
+                            if(cr-b.left<16 && cr-b.left>0) {
+                                dead++
+                            } else if(cr-b.left<16 && cr-b.left>0) {
+                                dead+=2
+                            } else if(b.top>532) {
+                                dead+=3
+                            } else {
+                                dead+=4
+                            }
+                            /*
+                            if(mov==0) {
+                                window.alert('doot')
+                            } else if(mov>0 && (b.lane*96+88)>(88+(96*cx)-Math.round(64*((0.01*Math.pow(mov,2)))))) {
+                                window.alert('mamp')
+                            } else if(mov<0 && (b.lane*96+88)<(88+(96*cx)+Math.round(64*((0.01*Math.pow(mov,2)))))){
+                                window.alert('preemp')
+                            }*/
+                        }
+                    }
+                    
+                })
+                
+                if(dead===0){score+=(0.1+(sped/10000));}
+                if(score>100 && score<500) {sped+=0.5;} else if (score>500 && score<3000) {sped++}
+                if(kill>-1) {kill++}
+                
+            },15)}
+            
+            
+            function move(d){
+                if(isNaN(mov) === true) {mov=0;}
+                if(mov===0 && !pause) {
+                    if((cx+d)>-1 && (cx+d)<3){
+                        mov=(10*d);
+                        cx+=d;
+                    }
+                }
+            }
+            if(supportsTouch===true) {
+                document.getElementById('game').addEventListener('touchstart',function(event) {
+                if(game===true) {
+                    var x = event.changedTouches[0].pageX - document.getElementById('game').offsetLeft;
+                    var y = event.changedTouches[0].pageY - document.getElementById('game').offsetTop;
+                    if(x<216) {move(-1);} else {move(1);}
+                }});
+            } else {
+                document.getElementById('game').addEventListener('click',function(event) {
+                if(game===true) {
+                    var x = event.pageX - document.getElementById('game').offsetLeft;
+                    var y = event.pageY - document.getElementById('game').offsetTop;
+                    if(x<216) {move(-1);} else {move(1);}
+                }})
+            };
+            window.onkeydown = function(e) {
+            if(game===true) {
+                var key = e.keyCode ? e.keyCode : e.which;
+                if(key==37 && pause===false) {move(-1);} else if(key==39 && pause===false) {move(1);}
+            }};
+        }
+        /*
+        function change() {
+            ctx.fillStyle = "#A0A0FF"
+            ctx.fillRect(0,0,c.width,c.height)
+            var a = eval(document.getElementById('x').value)
+            var b = eval(document.getElementById('y').value)
+            var t = document.getElementById('color').value;
+            var d = document.getElementById('text').value;
+            text(a,b,t,d);
+            console.log(a,b,t,d)
+        }
+        */
+    </script>
+  </body>
+</html>

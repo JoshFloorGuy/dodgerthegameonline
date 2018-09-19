@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body style="font-family:monospace;text-align:center">
+    <h1>High Scores</h1>
+    <button onClick="Javascript:noot()">Refresh</button>
+    <script>
+        var g = google.script.run;
+        g.withSuccessHandler(doot).refresh()
+        function doot(lits) {
+            var x = document.createElement('div')
+            x.style.width="300px"
+            x.id="The"
+            for(i=0;i<lits.length;i++) {
+                var d = document.createElement('div')
+                d.style = "background-color:#FFFF44;padding:4px;margin:4px"
+                var a = document.createElement('table')
+                a.style.width="100%"
+                var b = a.insertRow(0)
+                b.insertCell(0).innerHTML=(i+1)+'. '+lits[i][1]
+                var c = b.insertCell(1)
+                c.style="text-align:right"
+                c.innerHTML=lits[i][0]+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+                d.append(a)
+                x.append(d)
+            }
+            document.body.append(x)
+        }
+        function noot() {
+            document.body.removeChild(document.getElementById('The'))
+            g.withSuccessHandler(doot).refresh()
+        }
+    </script>
+  </body>
+</html>
